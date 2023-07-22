@@ -6,6 +6,7 @@ import model.loss as module_loss
 import model.metric as module_metric
 import model.model as module_arch
 from parse_config import ConfigParser
+from utils import to_device
 
 
 def main(config):
@@ -46,7 +47,7 @@ def main(config):
 
     with torch.no_grad():
         for i, (data, target) in enumerate(tqdm(data_loader)):
-            data, target = data.to(device), target.to(device)
+            data, target = to_device(data, device), to_device(target, device)
             output = model(data)
 
             #

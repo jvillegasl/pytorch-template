@@ -6,6 +6,18 @@ from itertools import repeat
 from collections import OrderedDict
 
 
+def to_device(x, device):
+    if isinstance(x, list):
+        return [to_device(t, device) for t in x]
+    if isinstance(x, tuple):
+        return tuple(to_device(t, device) for t in x)
+    elif isinstance(x, dict):
+        return {k: to_device(x[k], device) for k in x}
+    elif isinstance(x, (torch.Tensor, torch.nn.Module)):
+        return x.to(device)
+    else:
+        raise Exception(f'Type {type(x)} not supported')
+
 def ensure_dir(dirname):
     dirname = Path(dirname)
     if not dirname.is_dir():
